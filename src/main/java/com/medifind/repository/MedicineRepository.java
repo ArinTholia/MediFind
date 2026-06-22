@@ -8,4 +8,8 @@ import java.util.List;
 public interface MedicineRepository extends JpaRepository<Medicine, Long> {
 
     List<Medicine> findByNameContainingIgnoreCase(String name);
+
+    List<Medicine> findByLocationContainingIgnoreCase(String location);
+
+    List<Medicine> findByPharmacyNameContainingIgnoreCase(String pharmacyName);
 }

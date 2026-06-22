@@ -14,36 +14,70 @@ public class Medicine {
 
     private String manufacturer;
 
-    public Medicine() {
-    }
+    private Double price;
 
-    public Medicine(Long id, String name, String manufacturer) {
-        this.id = id;
-        this.name = name;
-        this.manufacturer = manufacturer;
+    private Integer stock;
+
+    private String pharmacyName;
+
+    private String location;
+
+    public Medicine() {
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public String getManufacturer() {
+        return manufacturer;
+    }
+
     public void setManufacturer(String manufacturer) {
         this.manufacturer = manufacturer;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public String getPharmacyName() {
+        return pharmacyName;
+    }
+
+    public void setPharmacyName(String pharmacyName) {
+        this.pharmacyName = pharmacyName;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }
