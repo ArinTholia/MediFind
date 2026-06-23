@@ -12,4 +12,10 @@ public interface MedicineRepository extends JpaRepository<Medicine, Long> {
     List<Medicine> findByLocationContainingIgnoreCase(String location);
 
     List<Medicine> findByPharmacyNameContainingIgnoreCase(String pharmacyName);
+
+    List<Medicine> findAllByOrderByPriceAsc();
+
+    List<Medicine> findAllByOrderByPriceDesc();
+
+    List<Medicine> findByStockLessThan(Integer stock);
 }

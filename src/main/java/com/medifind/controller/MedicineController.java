@@ -16,16 +16,10 @@ public class MedicineController {
         this.repository = repository;
     }
 
-    // GET ALL MEDICINES
-    @GetMapping
-    public List<Medicine> getMedicines() {
-        return repository.findAll();
-    }
-
-    // GET MEDICINE BY ID
-    @GetMapping("/{id}")
-    public Medicine getMedicineById(@PathVariable Long id) {
-        return repository.findById(id).orElse(null);
+    // COUNT MEDICINES
+    @GetMapping("/count")
+    public long countMedicines() {
+        return repository.count();
     }
 
     // SEARCH BY MEDICINE NAME
@@ -52,23 +46,54 @@ public class MedicineController {
         return repository.findByPharmacyNameContainingIgnoreCase(pharmacy);
     }
 
-    // ADD NEW MEDICINE
+    // SORT PRICE ASCENDING
+    @GetMapping("/sort/price-asc")
+    public List<Medicine> sortByPriceAsc() {
+        return repository.findAllByOrderByPriceAsc();
+    }
+
+    // SORT PRICE DESCENDING
+    @GetMapping("/sort/price-desc")
+    public List<Medicine> sortByPriceDesc() {
+        return repository.findAllByOrderByPriceDesc();
+    }
+
+    // LOW STOCK ALERT
+    @GetMapping("/low-stock")
+    public List<Medicine> lowStockMedicines() {
+        return repository.findByStockLessThan(50);
+    }
+
+    // GET ALL MEDICINES
+    @GetMapping
+    public List<Medicine> getMedicines() {
+        return repository.findAll();
+    }
+
+    // GET MEDICINE BY ID
+    @GetMapping("/id/{id}")
+    public Medicine getMedicineById(@PathVariable Long id) {
+
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Medicine not found"));
+    }
+
+    // ADD MEDICINE
     @PostMapping
     public Medicine addMedicine(@RequestBody Medicine medicine) {
         return repository.save(medicine);
     }
 
     // UPDATE MEDICINE
-    @PutMapping("/{id}")
+    @PutMapping("/id/{id}")
     public Medicine updateMedicine(
             @PathVariable Long id,
             @RequestBody Medicine updatedMedicine) {
 
-        Medicine medicine = repository.findById(id).orElse(null);
-
-        if (medicine == null) {
-            return null;
-        }
+        Medicine medicine = repository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Medicine not found"));
 
         medicine.setName(updatedMedicine.getName());
         medicine.setManufacturer(updatedMedicine.getManufacturer());
@@ -81,15 +106,15 @@ public class MedicineController {
     }
 
     // DELETE MEDICINE
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public String deleteMedicine(@PathVariable Long id) {
 
         if (!repository.existsById(id)) {
-            return "Medicine not found!";
+            throw new RuntimeException("Medicine not found");
         }
 
         repository.deleteById(id);
 
-        return "Medicine deleted successfully!";
+        return "Medicine deleted successfully";
     }
 }
