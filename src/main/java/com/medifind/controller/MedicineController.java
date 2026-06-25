@@ -2,6 +2,7 @@ package com.medifind.controller;
 
 import com.medifind.model.Medicine;
 import com.medifind.service.MedicineService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
@@ -24,23 +25,32 @@ public class MedicineController {
 
     @GetMapping("/id/{id}")
     public Medicine getMedicineById(@PathVariable Long id) {
-        return service.getMedicineById(id);
+
+        Medicine medicine = service.getMedicineById(id);
+
+        if (medicine == null) {
+            throw new RuntimeException("Medicine not found");
+        }
+
+        return medicine;
     }
 
     @PostMapping
-    public Medicine addMedicine(@RequestBody Medicine medicine) {
+    public Medicine addMedicine(
+            @Valid @RequestBody Medicine medicine) {
+
         return service.saveMedicine(medicine);
     }
 
     @PutMapping("/{id}")
     public Medicine updateMedicine(
             @PathVariable Long id,
-            @RequestBody Medicine updatedMedicine) {
+            @Valid @RequestBody Medicine updatedMedicine) {
 
         Medicine medicine = service.getMedicineById(id);
 
         if (medicine == null) {
-            return null;
+            throw new RuntimeException("Medicine not found");
         }
 
         medicine.setName(updatedMedicine.getName());
@@ -57,11 +67,12 @@ public class MedicineController {
     public String deleteMedicine(@PathVariable Long id) {
 
         if (service.getMedicineById(id) == null) {
-            return "Medicine not found!";
+            throw new RuntimeException("Medicine not found");
         }
 
         service.deleteMedicine(id);
-        return "Medicine deleted successfully!";
+
+        return "Medicine deleted successfully";
     }
 
     @GetMapping("/search")

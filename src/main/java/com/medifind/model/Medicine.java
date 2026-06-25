@@ -1,21 +1,26 @@
 package com.medifind.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "medicine")
 public class Medicine {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Medicine name is required")
     private String name;
 
+    @NotBlank(message = "Manufacturer is required")
     private String manufacturer;
 
+    @NotNull(message = "Price is required")
     private Double price;
 
+    @NotNull(message = "Stock is required")
     private Integer stock;
 
     private String pharmacyName;
@@ -23,6 +28,18 @@ public class Medicine {
     private String location;
 
     public Medicine() {
+    }
+
+    public Medicine(Long id, String name, String manufacturer,
+                    Double price, Integer stock,
+                    String pharmacyName, String location) {
+        this.id = id;
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.price = price;
+        this.stock = stock;
+        this.pharmacyName = pharmacyName;
+        this.location = location;
     }
 
     public Long getId() {
@@ -37,44 +54,44 @@ public class Medicine {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getManufacturer() {
         return manufacturer;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
     }
 
     public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public Integer getStock() {
         return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
     }
 
     public String getPharmacyName() {
         return pharmacyName;
     }
 
-    public void setPharmacyName(String pharmacyName) {
-        this.pharmacyName = pharmacyName;
-    }
-
     public String getLocation() {
         return location;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setManufacturer(String manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
+    public void setPharmacyName(String pharmacyName) {
+        this.pharmacyName = pharmacyName;
     }
 
     public void setLocation(String location) {
