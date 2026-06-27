@@ -9,40 +9,41 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository repository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder encoder;
+    private final JwtService jwtService;
 
     public UserService(UserRepository repository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder encoder,
+                       JwtService jwtService) {
+
         this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
+        this.encoder = encoder;
+        this.jwtService = jwtService;
     }
 
-    // Register User
     public User register(User user) {
 
-        if (repository.existsByEmail(user.getEmail())) {
+        if (repository.findByEmail(user.getEmail()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(
+                encoder.encode(user.getPassword())
+        );
 
         return repository.save(user);
     }
 
-    // Login User
     public String login(String email, String password) {
 
-        User user = repository.findByEmail(email).orElse(null);
+        User user = repository.findByEmail(email)
+                .orElseThrow(() ->
+                        new RuntimeException("User not found"));
 
-        if (user == null) {
-            return "User not found";
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("Invalid Password");
         }
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return "Login Successful";
-        }
-
-        return "Invalid Password";
+        return jwtService.generateToken(user.getEmail());
     }
-
 }

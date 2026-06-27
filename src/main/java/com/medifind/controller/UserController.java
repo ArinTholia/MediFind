@@ -15,13 +15,11 @@ public class UserController {
         this.service = service;
     }
 
-    // Register API
     @PostMapping("/register")
     public User register(@Valid @RequestBody User user) {
         return service.register(user);
     }
 
-    // Login API
     @PostMapping("/login")
     public String login(@RequestBody User loginUser) {
 
