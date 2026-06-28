@@ -1,33 +1,26 @@
 package com.medifind.service;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.medifind.security.JwtUtil;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 @Service
 public class JwtService {
 
-    // Secret key (change this to a long random string in production)
-    private static final String SECRET_KEY =
-            "medifind-secret-key-12345678901234567890";
+    private final JwtUtil jwtUtil;
 
-    // Token validity (24 hours)
-    private static final long EXPIRATION_TIME =
-            1000 * 60 * 60 * 24;
+    public JwtService(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
     public String generateToken(String email) {
+        return jwtUtil.generateToken(email);
+    }
 
-        return Jwts.builder()
-                .subject(email)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(
-                        io.jsonwebtoken.security.Keys.hmacShaKeyFor(
-                                SECRET_KEY.getBytes()
-                        )
-                )
-                .compact();
+    public String extractUsername(String token) {
+        return jwtUtil.extractUsername(token);
+    }
+
+    public boolean validateToken(String token) {
+        return jwtUtil.isTokenValid(token);
     }
 }
