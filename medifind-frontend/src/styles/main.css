@@ -115,3 +115,58 @@ button:hover{
 .nav-links a:hover{
     color:yellow;
 }
+form {
+    max-width: 400px;
+    margin: 30px auto;
+}
+
+form input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+form input:focus {
+    outline: none;
+    border-color: #1976d2;
+}
+.dashboard-container {
+    padding: 50px;
+    text-align: center;
+}
+
+.dashboard-container h1 {
+    color: #1976d2;
+    margin-bottom: 40px;
+}
+
+.dashboard-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.dashboard-card {
+    background: white;
+    width: 220px;
+    padding: 30px 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h3 {
+    color: #444;
+    margin-top: 0;
+}
+
+.dashboard-card p {
+    color: #1976d2;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 0;
+}
