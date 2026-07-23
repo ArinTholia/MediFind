@@ -170,3 +170,99 @@ form input:focus {
     font-weight: bold;
     margin-bottom: 0;
 }
+/* Medicines Page */
+
+.medicines-container {
+    padding: 40px 60px;
+}
+
+.medicines-container h1 {
+    text-align: center;
+    color: #1976d2;
+    margin-bottom: 40px;
+}
+
+.medicine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.medicine-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.medicine-card h2 {
+    color: #1976d2;
+    margin-top: 0;
+}
+
+.medicine-card p {
+    color: #555;
+    margin: 10px 0;
+}
+/* Medicine Search */
+
+.medicine-search {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    max-width: 650px;
+    margin: 0 auto 40px;
+}
+
+.medicine-search input {
+    flex: 1;
+    padding: 12px 15px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.medicine-search button {
+    margin-top: 10px;
+    padding: 12px 25px;
+}
+
+.loading-text {
+    text-align: center;
+}
+
+.no-medicines {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+}
+/* Stock Status */
+
+.stock {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 5px 0 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.stock.available {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.stock.low {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.stock.out {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.stock.unknown {
+    background: #eeeeee;
+    color: #616161;
+}
