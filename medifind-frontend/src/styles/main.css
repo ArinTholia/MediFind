@@ -266,3 +266,40 @@ form input:focus {
     background: #eeeeee;
     color: #616161;
 }
+.medicine-search .clear-button {
+    background: #6c757d;
+}
+
+.medicine-search .clear-button:hover {
+    background: #495057;
+}
+/* Medicine Availability Filters */
+
+.filter-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0 35px;
+}
+
+.filter-buttons button {
+    margin-top: 0;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.filter-buttons button:hover {
+    background: #0d47a1;
+}
+.filter-buttons .active-filter {
+    background: #0d47a1;
+    transform: scale(1.05);
+}
+.result-count {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 15px;
+}

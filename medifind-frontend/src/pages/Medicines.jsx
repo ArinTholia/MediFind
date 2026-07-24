@@ -3,12 +3,26 @@ import api from "../services/api";
 
 function Medicines() {
 
+  // Stores medicines received from backend
   const [medicines, setMedicines] = useState([]);
+
+  // Stores text entered in search box
   const [searchName, setSearchName] = useState("");
+
+  // Loading state
   const [loading, setLoading] = useState(true);
+
+  // Error message
   const [error, setError] = useState("");
 
-  // Load all medicines
+  // Current availability filter
+  const [filter, setFilter] = useState("all");
+
+
+  // ==========================================
+  // LOAD ALL MEDICINES
+  // ==========================================
+
   const fetchMedicines = async () => {
 
     try {
@@ -23,6 +37,7 @@ function Medicines() {
     } catch (error) {
 
       console.error("Error fetching medicines:", error);
+
       setError("Unable to load medicines.");
 
     } finally {
@@ -30,16 +45,25 @@ function Medicines() {
       setLoading(false);
 
     }
+
   };
 
-  // Automatically load medicines when page opens
+
+  // ==========================================
+  // LOAD MEDICINES WHEN PAGE OPENS
+  // ==========================================
+
   useEffect(() => {
 
     fetchMedicines();
 
   }, []);
 
-  // Search medicine
+
+  // ==========================================
+  // SEARCH MEDICINE
+  // ==========================================
+
   const handleSearch = async (e) => {
 
     e.preventDefault();
@@ -47,7 +71,10 @@ function Medicines() {
     // If search box is empty, show all medicines
     if (searchName.trim() === "") {
 
+      setFilter("all");
+
       fetchMedicines();
+
       return;
 
     }
@@ -63,9 +90,13 @@ function Medicines() {
 
       setMedicines(response.data);
 
+      // Reset availability filter after searching
+      setFilter("all");
+
     } catch (error) {
 
       console.error("Search error:", error);
+
       setError("Unable to search medicines.");
 
     } finally {
@@ -73,15 +104,96 @@ function Medicines() {
       setLoading(false);
 
     }
+
   };
+
+
+  // ==========================================
+  // CLEAR SEARCH
+  // ==========================================
+
+  const handleClear = () => {
+
+    // Clear search box
+    setSearchName("");
+
+    // Reset filter to All
+    setFilter("all");
+
+    // Load all medicines again
+    fetchMedicines();
+
+  };
+
+
+  // ==========================================
+  // FILTER MEDICINES BY STOCK
+  // ==========================================
+
+  const filteredMedicines = medicines.filter((medicine) => {
+
+    // IN STOCK
+    // Stock greater than 10
+
+    if (filter === "inStock") {
+
+      return (
+        medicine.stock != null &&
+        medicine.stock > 10
+      );
+
+    }
+
+
+    // LOW STOCK
+    // Stock between 1 and 10
+
+    if (filter === "lowStock") {
+
+      return (
+        medicine.stock != null &&
+        medicine.stock > 0 &&
+        medicine.stock <= 10
+      );
+
+    }
+
+
+    // OUT OF STOCK
+    // Stock exactly 0
+
+    if (filter === "outOfStock") {
+
+      return medicine.stock === 0;
+
+    }
+
+
+    // ALL
+    return true;
+
+  });
+
+
+  // ==========================================
+  // PAGE
+  // ==========================================
 
   return (
 
     <div className="medicines-container">
 
-      <h1>Available Medicines</h1>
 
-      {/* Search Form */}
+      {/* PAGE TITLE */}
+
+      <h1>
+        Available Medicines
+      </h1>
+
+
+      {/* ======================================
+          SEARCH BAR
+      ====================================== */}
 
       <form
         className="medicine-search"
@@ -95,90 +207,307 @@ function Medicines() {
           onChange={(e) => setSearchName(e.target.value)}
         />
 
+
+        {/* SEARCH BUTTON */}
+
         <button type="submit">
+
           Search
+
+        </button>
+
+
+        {/* CLEAR BUTTON */}
+
+        <button
+          type="button"
+          className="clear-button"
+          onClick={handleClear}
+        >
+
+          Clear
+
         </button>
 
       </form>
 
-      {error && <p>{error}</p>}
+
+      {/* ======================================
+          AVAILABILITY FILTER BUTTONS
+      ====================================== */}
+
+      <div className="filter-buttons">
+
+
+        {/* ALL */}
+
+        <button
+          type="button"
+          className={
+            filter === "all"
+              ? "active-filter"
+              : ""
+          }
+          onClick={() => setFilter("all")}
+        >
+
+          All
+
+        </button>
+
+
+        {/* IN STOCK */}
+
+        <button
+          type="button"
+          className={
+            filter === "inStock"
+              ? "active-filter"
+              : ""
+          }
+          onClick={() => setFilter("inStock")}
+        >
+
+          In Stock
+
+        </button>
+
+
+        {/* LOW STOCK */}
+
+        <button
+          type="button"
+          className={
+            filter === "lowStock"
+              ? "active-filter"
+              : ""
+          }
+          onClick={() => setFilter("lowStock")}
+        >
+
+          Low Stock
+
+        </button>
+
+
+        {/* OUT OF STOCK */}
+
+        <button
+          type="button"
+          className={
+            filter === "outOfStock"
+              ? "active-filter"
+              : ""
+          }
+          onClick={() => setFilter("outOfStock")}
+        >
+
+          Out of Stock
+
+        </button>
+
+      </div>
+
+
+      {/* ======================================
+          RESULT COUNT
+      ====================================== */}
+
+      {!loading && !error && (
+
+        <p className="result-count">
+
+          {filteredMedicines.length}{" "}
+
+          {filteredMedicines.length === 1
+            ? "medicine"
+            : "medicines"}{" "}
+
+          found
+
+        </p>
+
+      )}
+
+
+      {/* ======================================
+          ERROR MESSAGE
+      ====================================== */}
+
+      {error && (
+
+        <p className="no-medicines">
+
+          {error}
+
+        </p>
+
+      )}
+
+
+      {/* ======================================
+          LOADING / NO RESULTS / MEDICINES
+      ====================================== */}
 
       {loading ? (
 
+        // LOADING
+
         <h2 className="loading-text">
+
           Loading medicines...
+
         </h2>
 
-      ) : medicines.length === 0 ? (
+      ) : filteredMedicines.length === 0 ? (
+
+        // NO MEDICINES FOUND
 
         <p className="no-medicines">
+
           No medicines found.
+
         </p>
 
       ) : (
 
+        // MEDICINE CARDS
+
         <div className="medicine-grid">
 
-          {medicines.map((medicine) => (
+          {filteredMedicines.map((medicine) => (
 
             <div
               className="medicine-card"
               key={medicine.id}
             >
 
-              <h2>{medicine.name}</h2>
+
+              {/* MEDICINE NAME */}
+
+              <h2>
+
+                {medicine.name}
+
+              </h2>
+
+
+              {/* MANUFACTURER */}
 
               <p>
-                <strong>Manufacturer:</strong>{" "}
-                {medicine.manufacturer || "Not available"}
+
+                <strong>
+                  Manufacturer:
+                </strong>{" "}
+
+                {medicine.manufacturer ||
+                  "Not available"}
+
               </p>
 
+
+              {/* PRICE */}
+
               <p>
-                <strong>Price:</strong>{" "}
+
+                <strong>
+                  Price:
+                </strong>{" "}
+
                 {medicine.price != null
                   ? `₹${medicine.price}`
                   : "Not available"}
+
               </p>
 
+
+              {/* STOCK */}
+
               <p>
-                <strong>Stock:</strong>{" "}
+
+                <strong>
+                  Stock:
+                </strong>{" "}
+
                 {medicine.stock != null
                   ? medicine.stock
                   : "Not available"}
-              </p>
-                {medicine.stock == null ? (
 
-  <span className="stock unknown">
-    Availability Unknown
-  </span>
-
-) : medicine.stock === 0 ? (
-
-  <span className="stock out">
-    Out of Stock
-  </span>
-
-) : medicine.stock <= 10 ? (
-
-  <span className="stock low">
-    Low Stock
-  </span>
-
-) : (
-
-  <span className="stock available">
-    In Stock
-  </span>
-
-)}
-              <p>
-                <strong>Pharmacy:</strong>{" "}
-                {medicine.pharmacyName || "Not available"}
               </p>
 
+
+              {/* ==================================
+                  STOCK AVAILABILITY STATUS
+              ================================== */}
+
+              {medicine.stock == null ? (
+
+                // UNKNOWN STOCK
+
+                <span className="stock unknown">
+
+                  Availability Unknown
+
+                </span>
+
+              ) : medicine.stock === 0 ? (
+
+                // OUT OF STOCK
+
+                <span className="stock out">
+
+                  Out of Stock
+
+                </span>
+
+              ) : medicine.stock <= 10 ? (
+
+                // LOW STOCK
+
+                <span className="stock low">
+
+                  Low Stock
+
+                </span>
+
+              ) : (
+
+                // IN STOCK
+
+                <span className="stock available">
+
+                  In Stock
+
+                </span>
+
+              )}
+
+
+              {/* PHARMACY */}
+
               <p>
-                <strong>Location:</strong>{" "}
-                {medicine.location || "Not available"}
+
+                <strong>
+                  Pharmacy:
+                </strong>{" "}
+
+                {medicine.pharmacyName ||
+                  "Not available"}
+
+              </p>
+
+
+              {/* LOCATION */}
+
+              <p>
+
+                <strong>
+                  Location:
+                </strong>{" "}
+
+                {medicine.location ||
+                  "Not available"}
+
               </p>
 
             </div>
