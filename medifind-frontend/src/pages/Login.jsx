@@ -23,19 +23,27 @@ function Login() {
 
       console.log("Login response:", response.data);
 
+      // Save login status in browser
+      localStorage.setItem("isLoggedIn", "true");
+
       setMessage("Login successful!");
 
+      // Redirect to Dashboard after 1 second
       setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
-
+  navigate("/dashboard");
+  window.location.reload();
+}, 1000);
     } catch (error) {
 
       console.error("Login error:", error);
 
+      // Remove login status if login fails
+      localStorage.removeItem("isLoggedIn");
+
       setMessage("Invalid email or password.");
 
     }
+
   };
 
   return (
@@ -47,6 +55,7 @@ function Login() {
       <form onSubmit={handleLogin}>
 
         <div>
+
           <input
             type="email"
             placeholder="Enter your email"
@@ -54,9 +63,11 @@ function Login() {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
+
         </div>
 
         <div>
+
           <input
             type="password"
             placeholder="Enter your password"
@@ -64,10 +75,13 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+
         </div>
 
         <button type="submit">
+
           Login
+
         </button>
 
       </form>
@@ -77,6 +91,7 @@ function Login() {
     </div>
 
   );
+
 }
 
 export default Login;

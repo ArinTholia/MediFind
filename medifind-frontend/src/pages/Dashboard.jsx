@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
+
 function Dashboard() {
 
   const [dashboardData, setDashboardData] = useState({
@@ -43,6 +44,7 @@ function Dashboard() {
 
     return (
       <div className="container">
+
         <h2>Loading dashboard...</h2>
       </div>
     );
@@ -54,6 +56,8 @@ function Dashboard() {
     <div className="dashboard-container">
 
       <h1>Dashboard</h1>
+
+  
 
       {error && <p>{error}</p>}
 
