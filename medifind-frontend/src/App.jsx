@@ -1,48 +1,32 @@
-import "./styles/main.css";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Medicines from './pages/Medicines';
+import Dashboard from './pages/Dashboard';
 
-import Navbar from "./components/Navbar";
-
-import { Routes, Route } from "react-router-dom";
-
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Medicines from "./pages/Medicines";
-import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
-
   return (
-
-    <>
-
+    <div className="app">
+      <ScrollToTop />
       <Navbar />
-
-      <Routes>
-
-        <Route path="/" element={<Home />} />
-
-        <Route path="/login" element={<Login />} />
-
-        <Route path="/register" element={<Register />} />
-
-        <Route
-    path="/dashboard"
-    element={
-        <ProtectedRoute>
-            <Dashboard />
-        </ProtectedRoute>
-    }
-/>
-
-        <Route path="/medicines" element={<Medicines />} />
-
-      </Routes>
-
-    </>
-
+      <main className="main-content">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/medicines" element={<Medicines />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        </Routes>
+      </main>
+      <Footer />
+    </div>
   );
-
 }
 
 export default App;
